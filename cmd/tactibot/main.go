@@ -30,6 +30,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	command := strings.Split(m.Content[1:], " ")
+	log.Printf("Received command: %v\n", command)
 	switch command[0] {
 	case "ping":
 		_, err := s.ChannelMessageSend(m.ChannelID, "pong!")
