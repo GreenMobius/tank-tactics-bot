@@ -1,1 +1,1 @@
-worker: ./bin/tank-tactics-bot
+worker: ./bin/tactibot
