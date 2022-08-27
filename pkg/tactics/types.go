@@ -15,15 +15,15 @@ const (
 )
 
 var discordMap map[string]string = map[string]string{
-	Black:  ":black_large_square:",
-	Red:    ":red_square:",
-	Orange: ":orange_square:",
-	Yellow: ":yellow_square:",
-	Green:  ":green_square:",
-	Blue:   ":blue_square:",
-	Purple: ":purple_square:",
-	Brown:  ":brown_square:",
-	White:  ":white_large_square:",
+	Black:  ":black_circle:",
+	Red:    ":red_circle:",
+	Orange: ":orange_circle:",
+	Yellow: ":yellow_circle:",
+	Green:  ":green_circle:",
+	Blue:   ":blue_circle:",
+	Purple: ":purple_circle:",
+	Brown:  ":brown_circle:",
+	White:  ":white_circle:",
 }
 
 type Player struct {

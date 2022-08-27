@@ -74,13 +74,8 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	case "map":
 		_, err := s.ChannelMessageSendEmbed(m.ChannelID, &discordgo.MessageEmbed{
-			Title: "Game Status",
-			Fields: []*discordgo.MessageEmbedField{
-				{
-					Name:  "Map",
-					Value: gameMap.ToDiscordString(),
-				},
-			},
+			Title:       "Game Map",
+			Description: gameMap.ToDiscordString(),
 		})
 		if err != nil {
 			log.Printf("Error sending message: %v\n", err)
