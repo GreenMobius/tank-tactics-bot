@@ -54,7 +54,6 @@ func NewMap(width int, height int) Map {
 
 func (m Map) ToDiscordString() string {
 	sb := strings.Builder{}
-	sb.WriteString("Map status:\n")
 	for _, col := range m.Grid {
 		for _, val := range col {
 			str, ok := discordMap[val.Value]
