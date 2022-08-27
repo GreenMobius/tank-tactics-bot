@@ -81,7 +81,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 			log.Printf("Error sending message: %v\n", err)
 		}
 	case "set":
-		if len(command) != 3 {
+		if len(command) != 4 {
 			_, err := s.ChannelMessageSend(m.ChannelID, helpText)
 			if err != nil {
 				log.Printf("Error sending message: %v\n", err)
