@@ -46,7 +46,6 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func main() {
 	botToken = os.Getenv("DISCORD_BOT_TOKEN")
-	log.Printf("Start of token: %v\n", botToken[0:4])
 	dg, err := discordgo.New("Bot " + botToken)
 	if err != nil {
 		log.Printf("Error creating discord session: %v\n", err)
