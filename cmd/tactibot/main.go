@@ -16,8 +16,6 @@ const helpText string = `Available commands:
 	ping    send a ping and wait for a pong
 	help    display help text`
 
-var botToken string
-
 func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore bot messages
 	if m.Author.ID == s.State.User.ID {
@@ -46,8 +44,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func main() {
-	botToken = os.Getenv("DISCORD_BOT_TOKEN")
-	dg, err := discordgo.New("Bot " + botToken)
+	dg, err := discordgo.New("Bot " + os.Getenv("DISCORD_BOT_TOKEN"))
 	if err != nil {
 		log.Printf("Error creating discord session: %v\n", err)
 		return
