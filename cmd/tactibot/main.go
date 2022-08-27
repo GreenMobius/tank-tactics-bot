@@ -1,20 +1,28 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/greenmobius/tank-tactics-bot/pkg/tactics"
 )
 
 const cmdPrefix rune = '!'
 
 const helpText string = `Available commands:
-	ping    send a ping and wait for a pong
-	help    display help text`
+	ping                    send a ping and wait for a pong
+	new <width> <height>    create a new map of specified width and height
+	map                     display the game map
+	set <x> <y> <color>     set a map location to a specified color
+	help                    display help text`
+
+var gameMap tactics.Map
 
 func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore bot messages
@@ -35,6 +43,65 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if err != nil {
 			log.Printf("Error sending message: %v\n", err)
 		}
+	case "new":
+		if len(command) != 3 {
+			_, err := s.ChannelMessageSend(m.ChannelID, helpText)
+			if err != nil {
+				log.Printf("Error sending message: %v\n", err)
+			}
+		}
+
+		width, err := strconv.ParseInt(command[1], 10, 32)
+		if err != nil || width < 1 || width > 20 {
+			_, err := s.ChannelMessageSend(m.ChannelID, "Width must be a number between 1 and 20")
+			if err != nil {
+				log.Printf("Error sending message: %v\n", err)
+			}
+		}
+
+		height, err := strconv.ParseInt(command[2], 10, 32)
+		if err != nil || height < 1 || height > 20 {
+			_, err := s.ChannelMessageSend(m.ChannelID, "Height must be a number between 1 and 20")
+			if err != nil {
+				log.Printf("Error sending message: %v\n", err)
+			}
+		}
+
+		gameMap = tactics.NewMap(int(width), int(height))
+		_, err = s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Created new map of width %d and height %d", width, height))
+		if err != nil {
+			log.Printf("Error sending message: %v\n", err)
+		}
+	case "map":
+		_, err := s.ChannelMessageSend(m.ChannelID, gameMap.ToDiscordString())
+		if err != nil {
+			log.Printf("Error sending message: %v\n", err)
+		}
+	case "set":
+		if len(command) != 3 {
+			_, err := s.ChannelMessageSend(m.ChannelID, helpText)
+			if err != nil {
+				log.Printf("Error sending message: %v\n", err)
+			}
+		}
+
+		x, err := strconv.ParseInt(command[1], 10, 32)
+		if err != nil || x < 0 || int(x) > len(gameMap.Grid) {
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("X must be a number between 0 and %d", len(gameMap.Grid)))
+			if err != nil {
+				log.Printf("Error sending message: %v\n", err)
+			}
+		}
+
+		y, err := strconv.ParseInt(command[2], 10, 32)
+		if err != nil || y < 0 || int(y) > len(gameMap.Grid[0]) {
+			_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Y must be a number between 0 and %d", len(gameMap.Grid[0])))
+			if err != nil {
+				log.Printf("Error sending message: %v\n", err)
+			}
+		}
+
+		gameMap.Grid[x][y].Value = command[3]
 	default:
 		_, err := s.ChannelMessageSend(m.ChannelID, helpText)
 		if err != nil {
