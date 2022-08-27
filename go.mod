@@ -1,6 +1,6 @@
 module github.com/greenmobius/tank-tactics-bot
 
-go 1.19
+go 1.18
 
 require github.com/bwmarrin/discordgo v0.26.0
 
